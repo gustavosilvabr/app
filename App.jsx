@@ -13,6 +13,7 @@ import SimpleSignInScreen from "./src/pages/login";
 import { LinearGradient } from "expo-linear-gradient";
 import Background from "./src/assets/background.jpg";
 import { StatusBar } from "expo-status-bar";
+import Home from "./src/pages/home/home.jsx";
 
 const Stack = createStackNavigator();
 
@@ -50,14 +51,10 @@ function SplashScreen() {
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [userToken, setUserToken] = useState(null);
-
-  // Simula o carregamento de 5 segundos
+ 
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-      // Define um token de exemplo (ou deixa null para simular login)
-      setUserToken(null);
     }, 10000);
   }, []);
 
@@ -72,16 +69,12 @@ export default function App() {
           headerShown: false, // Remove os headers de todas as telas
         }}
       >
-        {userToken == null ? (
-          <Stack.Screen name="SignIn" component={SimpleSignInScreen}  />
-        ) : (
-          <Stack.Screen name="Home" component={HomeScreen} />
-        )}
+          <Stack.Screen name="SignIn" component={SimpleSignInScreen} />
+          <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
 const styles = StyleSheet.create({
   splashContainer: {
     justifyContent: "center",

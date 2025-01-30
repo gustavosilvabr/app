@@ -8,76 +8,104 @@ import {
   TouchableOpacity,
   Linking,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import Background from "../../assets/background.jpg";
 
 export default function SimpleSignInScreen() {
-  const [hasAccount, setHasAccount] = useState(false); // Estado para verificar se o usuário tem cadastro
+  const [hasAccount, setHasAccount] = useState(true);
+  const [handleInputUser, setHandleInputUser] = useState("");
+  const [handleInputPassword, setHandleInputPassword] = useState("");
+  const navigation = useNavigation();
+  const usuarios = {
+    usuario: "amigo",
+    senha: "123",
+  };
+
+  function VerificarUsuario() {
+    if (
+      handleInputUser === usuarios.usuario &&
+      handleInputPassword === usuarios.senha
+    ) {
+      setHasAccount(true);
+      navigation.navigate('Home');
+    } else {
+      alert("Usuário ou senha incorretos");
+    }
+  }
 
   const handleWhatsappPress = () => {
     // Link para abrir o WhatsApp
-    Linking.openURL("whatsapp://send?phone=+5561992030064&text=Ol%C3%A1,%20quero%20criar%20um%20cadastro");
+    Linking.openURL(
+      "whatsapp://send?phone=+5561992030064&text=Ol%C3%A1,%20quero%20criar%20um%20cadastro"
+    );
   };
-
+    
   return (
-    <ImageBackground
-      source={Background}
-      style={styles.backgroundImage}
-      resizeMode="cover"
-    >
-      {/* Gradiente para sombreamento */}
-      <LinearGradient
-        colors={["rgba(0, 0, 0, 0.6)", "rgba(1, 1, 1, 0.1)"]}
-        style={StyleSheet.absoluteFillObject} // Preenche o mesmo tamanho da imagem
-      />
-
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.titleText}>Login</Text>
-
-        <View style={styles.containerInput}>
-          <View>
-            <Text style={styles.label}>Usuário</Text>
-            <TextInput
-              placeholder="Digite seu usuário"
-              placeholderTextColor={"white"}
-              style={styles.input}
-            />
-          </View>
-
-          <View>
-            <Text style={styles.label}>Senha</Text>
-            <TextInput
-              placeholder="Digite sua senha"
-              placeholderTextColor={"white"}
-              secureTextEntry={true}
-              style={styles.input}
-            />
-          </View>
-
-          {/* Botão de Login */}
-          <TouchableOpacity style={styles.loginButton}>
-            <Text style={styles.loginText}>Login</Text>
-          </TouchableOpacity>
-
-          {/* Verificação de cadastro */}
-          {!hasAccount && (
-            <View style={styles.registerSection}>
-              <Text style={styles.registerText}>
-                Ainda não tem cadastro? Clique abaixo para falar com nosso atendente:
-              </Text>
-              {/* Botão para falar pelo WhatsApp */}
-              <TouchableOpacity
-                style={styles.whatsappButton}
-                onPress={handleWhatsappPress}
-              >
-                <Text style={styles.whatsappText}>Falar pelo WhatsApp</Text>
-              </TouchableOpacity>
+ 
+      <ImageBackground
+        source={Background}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        {/* Gradiente para sombreamento */}
+        <LinearGradient
+          colors={["rgba(0, 0, 0, 0.6)", "rgba(1, 1, 1, 0.1)"]}
+          style={StyleSheet.absoluteFillObject} // Preenche o mesmo tamanho da imagem
+        />
+        <SafeAreaView style={styles.container}>
+          <Text style={styles.titleText}>Login</Text>
+          <View style={styles.containerInput}>
+            <View>
+              <Text style={styles.label}>Usuário</Text>
+              <TextInput
+                placeholder="Digite seu usuário"
+                placeholderTextColor={"white"}
+                style={styles.input}
+                value={handleInputUser}
+                onChangeText={setHandleInputUser}
+              />
             </View>
-          )}
-        </View>
-      </SafeAreaView>
-    </ImageBackground>
+
+            <View>
+              <Text style={styles.label}>Senha</Text>
+              <TextInput
+                placeholder="Digite sua senha"
+                placeholderTextColor={"white"}
+                secureTextEntry={true}
+                style={styles.input}
+                value={handleInputPassword}
+                onChangeText={setHandleInputPassword}
+              />
+            </View>
+            {/* Botão de Login */}
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={VerificarUsuario}
+            >
+              <Text style={styles.loginText}>Login</Text>
+            </TouchableOpacity>
+
+            {/* Verificação de cadastro */}
+            {!hasAccount && (
+              <View style={styles.registerSection}>
+                <Text style={styles.registerText}>
+                  Ainda não tem cadastro? Clique abaixo para falar com nosso
+                  atendente:
+                </Text>
+                {/* Botão para falar pelo WhatsApp */}
+                <TouchableOpacity
+                  style={styles.whatsappButton}
+                  onPress={handleWhatsappPress}
+                >
+                  <Text style={styles.whatsappText}>Falar pelo WhatsApp</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </SafeAreaView>
+      </ImageBackground>
   );
 }
 
